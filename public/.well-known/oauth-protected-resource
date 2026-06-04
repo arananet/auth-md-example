@@ -1,0 +1,8 @@
+{
+  "resource": "https://api.auth-md-example.com/",
+  "resource_name": "auth-md-example",
+  "resource_logo_uri": "https://auth-md-example.com/logo.png",
+  "authorization_servers": ["https://auth.auth-md-example.com/"],
+  "scopes_supported": ["auth-md-example:read", "auth-md-example:write"],
+  "bearer_methods_supported": ["header"]
+}

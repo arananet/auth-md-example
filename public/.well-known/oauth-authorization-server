@@ -1,0 +1,27 @@
+{
+  "issuer": "https://auth.auth-md-example.com/",
+  "resource": "https://api.auth-md-example.com/",
+  "authorization_servers": ["https://auth.auth-md-example.com/"],
+  "scopes_supported": ["auth-md-example:read", "auth-md-example:write"],
+  "bearer_methods_supported": ["header"],
+  "agent_auth": {
+    "skill": "https://auth-md-example.com/auth.md",
+    "register_uri": "https://auth.auth-md-example.com/agent/auth",
+    "claim_uri": "https://auth.auth-md-example.com/agent/auth/claim",
+    "revocation_uri": "https://auth.auth-md-example.com/agent/auth/revoke",
+    "identity_types_supported": ["anonymous", "identity_assertion"],
+    "anonymous": {
+      "credential_types_supported": ["api_key"]
+    },
+    "identity_assertion": {
+      "assertion_types_supported": [
+        "urn:ietf:params:oauth:token-type:id-jag",
+        "verified_email"
+      ],
+      "credential_types_supported": ["api_key"]
+    },
+    "events_supported": [
+      "https://schemas.workos.com/events/agent/auth/identity/assertion/revoked"
+    ]
+  }
+}

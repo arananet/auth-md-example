@@ -1,0 +1,41 @@
+title: "auth.md agentic registration support"
+slug: "auth-md-support"
+type: feature
+status: approved
+description: |
+  Add auth.md (agentic registration) support following RFC 9728 and the agent_auth extension.
+  Implements three registration methods: id-jag identity assertion, verified_email assertion
+  with OTP claim ceremony, and anonymous pre-claim credentials.
+acceptance_criteria:
+  - "POST /agent/auth with type=identity_assertion+id-jag verifies JWT signature, enforces aud, rejects replayed jti, returns api_key credential"
+  - "POST /agent/auth with type=identity_assertion+verified_email triggers OTP email and returns claim_token"
+  - "POST /agent/auth with type=anonymous issues pre-claim credential and claim_token immediately"
+  - "POST /agent/auth/claim triggers OTP email for anonymous credential claim"
+  - "POST /agent/auth/claim/complete with valid OTP upgrades credential and returns bound credential"
+  - "GET bearer middleware validates SHA-256 hashed credentials; returns 401 on expiry or revocation"
+  - "POST /agent/auth/revoke ingests provider logout+jwt and user-driven revoke; subsequent use returns 401"
+  - "Credentials stored as SHA-256 hashes; raw value returned once at issuance"
+  - "Rate limiting: per-IP on unauthenticated endpoints, per-tenant on authenticated"
+  - "public/.well-known/oauth-protected-resource, public/.well-known/oauth-authorization-server, and public/auth.md are served correctly"
+test_plan:
+  - "Happy path: id-jag registration returns 200 with api_key"
+  - "Happy path: anonymous registration returns 200 with credential and claim_token"
+  - "Happy path: verified_email registration returns 202 with claim_token"
+  - "Happy path: claim/complete with correct OTP returns 200"
+  - "Negative: id-jag with invalid signature returns 401 invalid_signature"
+  - "Negative: id-jag with replayed jti returns 401 replay_detected"
+  - "Negative: id-jag with wrong audience returns 401 audience_mismatch"
+  - "Negative: id-jag with expired token returns 401 credential_expired"
+  - "Negative: claim/complete with wrong OTP returns 401 otp_invalid"
+  - "Negative: revoked credential returns 401 on next bearer use"
+  - "401-then-rediscover cycle: unauthenticated GET returns 401 with WWW-Authenticate resource_metadata header"
+roles:
+  implementer: "@arananet"
+  reviewer: "@arananet"
+  qa: "@arananet"
+  product_owner: "@arananet"
+out_of_scope:
+  - "Refresh tokens"
+  - "User-facing dashboard UI"
+  - "Production email delivery (stub only)"
+  - "Multi-tenancy beyond per-agent rate limiting"
