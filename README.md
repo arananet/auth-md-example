@@ -154,3 +154,11 @@ This project uses **OpenSpec** for spec-driven development. See
 ## License
 
 [MIT](LICENSE)
+
+---
+
+## Author
+
+**Eduardo Arana**
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H51MPWG)
